@@ -12,4 +12,21 @@ export class CategoriesComponent implements OnInit {
   ngOnInit() {
   }
 
+  onUpload()
+  {
+
+  }
+  onFileSelected(event)
+  {
+
+  }
+  addproduct()
+  {
+
+  }
+  all_check(){
+
+  }
+
+
 }

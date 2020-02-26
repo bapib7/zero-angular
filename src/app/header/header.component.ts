@@ -8,7 +8,7 @@ declare var $: any;
 })
 export class HeaderComponent implements OnInit {
     isnothome;
-  constructor(private route:Router) { }
+  constructor(public route:Router) { }
 
   ngOnInit() {
     this.route.events.subscribe(event=>{

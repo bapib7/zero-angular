@@ -9,7 +9,7 @@ import { CategoriesComponent } from './categories/categories.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
+
 
 @NgModule({
   declarations: [DashboardComponent, DashboardInnerComponent, ProductsComponent, OrdersComponent, CategoriesComponent, CategoriesComponent],
@@ -18,7 +18,6 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxDaterangepickerMd.forRoot(),
     AngularFontAwesomeModule,
     RouterModule.forChild([{path:'admin',component:DashboardComponent,children:[
       {path:'',component:DashboardInnerComponent},

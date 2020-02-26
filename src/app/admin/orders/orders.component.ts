@@ -12,4 +12,9 @@ export class OrdersComponent implements OnInit {
   ngOnInit() {
   }
 
+  all_check()
+  {
+    
+  }
+
 }
