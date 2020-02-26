@@ -1,0 +1,9 @@
+
+.left{background:rgb(90, 3, 161); min-height: 100vh;}
+.right{min-height: 100vh;}
+.logo{color: beige;text-align:center;font-size: 24px; margin: 20px 20px 0 20px;}
+.menu{    margin: 20px;font-size: 24px;color:white}
+.menu ul li{color:white}
+a{color:#d3a2fb;}
+a:hover{color:white}
+hr{background:white}
