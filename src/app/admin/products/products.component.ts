@@ -20,7 +20,7 @@ export class ProductsComponent implements OnInit {
   log_error=null;
   pro_len;
 
-  constructor(private http:HttpClient,private config:ConfigService,private apiService:ApiService) { 
+  constructor(private http:HttpClient,public config:ConfigService,private apiService:ApiService) { 
   
   }
  
