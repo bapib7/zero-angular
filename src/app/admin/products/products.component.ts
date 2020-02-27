@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import * as moment from 'moment';
+import { ConfigService } from '../services/config.service';
+import { ApiService } from '../services/api.service';
 
 declare var $ :any;
 
@@ -18,18 +20,18 @@ export class ProductsComponent implements OnInit {
   log_error=null;
   pro_len;
 
-  constructor(private http:HttpClient) { 
+  constructor(private http:HttpClient,private config:ConfigService,private apiService:ApiService) { 
   
   }
  
    products=null;
    deleteddataitem;
    fileuploadstatus=false;
-   baseurl="http://localhost:3000/";
   ngOnInit() {
 
      //get products
-     this.http.get('http://localhost:3000/api/products')
+
+     this.apiService.getx('api/products')
                                  .subscribe(r=>{
                                  if(r)   
                                  {
@@ -95,14 +97,8 @@ export class ProductsComponent implements OnInit {
                                if(this.addproduct.status=="VALID" && this.fileuploadstatus)
                                {
                                  console.log(this.addproduct.value);
-                                 const httpOptions = {
-                                   headers: new HttpHeaders({
-                                     'Content-Type':  'application/json',
-                                     
-                                   })
-                                 }; 
-                                 
-                                 this.http.post('http://localhost:3000/api/products',JSON.stringify(this.addproduct.value),httpOptions)
+                                
+                                 this.apiService.postx('api/products',JSON.stringify(this.addproduct.value))
                                  .subscribe(r=>{
                                  if(r)   
                                  {
@@ -131,7 +127,8 @@ onFileSelected(event)
         onUpload(){
           const fd = new FormData();
           fd.append('image',this.selectedfile,this.selectedfile.name);
-          this.http.post('http://localhost:3000/api/uploadfile',fd)
+
+          this.apiService.postx('api/uploadfile',fd)
                                  .subscribe(r=>{
                                  if(r)   
                                  {
@@ -174,7 +171,7 @@ onFileSelected(event)
         product_delete()
         {
           //console.log(this.deleteddataitem);
-          this.http.delete('http://localhost:3000/api/delete/'+this.deleteddataitem._id)
+          this.apiService.delx('api/delete/'+this.deleteddataitem._id)
           .subscribe((r)=>{
             if(r)   
                                  {
@@ -197,14 +194,8 @@ onFileSelected(event)
     if(this.editproduct.status=="VALID" )
     {
       console.log(this.editproduct.value);
-      const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type':  'application/json',
-          
-        })
-      }; 
       
-      this.http.put('http://localhost:3000/api/products/'+this.deleteddataitem._id,JSON.stringify(this.editproduct.value),httpOptions)
+      this.apiService.putx(this.config.baseurl+'api/products/'+this.deleteddataitem._id,JSON.stringify(this.editproduct.value))
       .subscribe(r=>{
       if(r)   
       {
