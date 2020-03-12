@@ -4,6 +4,8 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import * as moment from 'moment';
 import { ConfigService } from '../services/config.service';
 import { ApiService } from '../services/api.service';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {MatChipInputEvent} from '@angular/material/chips';
 
 declare var $ :any;
 
@@ -19,18 +21,26 @@ export class ProductsComponent implements OnInit {
 
   log_error=null;
   pro_len;
+  visible = true;
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  colors = [];
 
+
+  
   constructor(private http:HttpClient,public config:ConfigService,private apiService:ApiService) { 
   
   }
- 
+  public customPatterns =  { '0': { pattern: new RegExp('[0-9]') , symbol: '{X}' } }; 
    products=null;
    deleteddataitem;
    fileuploadstatus=false;
   ngOnInit() {
 
      //get products
-
+   
      this.apiService.getx('api/products')
                                  .subscribe(r=>{
                                  if(r)   
@@ -45,6 +55,8 @@ export class ProductsComponent implements OnInit {
 
      //
   }
+
+
 
   all_check()
   {
@@ -74,10 +86,11 @@ export class ProductsComponent implements OnInit {
   addproduct = new FormGroup({name:new FormControl('',Validators.required),
                               price:new FormControl('',Validators.required),
                               rprice:new FormControl('',Validators.required),
-                              selected:new FormControl({startDate:moment('2015-11-24T00:00Z'), endDate: moment('2015-11-26T00:00Z')}),
+                             // selected:new FormControl({startDate:moment('2015-11-24T00:00Z'), endDate: moment('2015-11-26T00:00Z')}),
                               sku:new FormControl('',Validators.required),
                               category:new FormControl('',Validators.required),
                               image:new FormControl('',Validators.required),
+                              chipList:new FormControl(''),
                               imagelink:new FormControl('')})
 
  editproduct = new FormGroup({name:new FormControl('',Validators.required),
@@ -97,8 +110,18 @@ export class ProductsComponent implements OnInit {
                                if(this.addproduct.status=="VALID" && this.fileuploadstatus)
                                {
                                  console.log(this.addproduct.value);
-                                
-                                 this.apiService.postx('api/products',JSON.stringify(this.addproduct.value))
+                                //  var col = [];
+                                //  for(let i=0;i< this.colors.length ; i++)
+                                //  {
+                                //   col.push('color[i]',this.colors[i]);
+
+                                //  }
+                                 var obj = {...this.addproduct.value,color: this.colors};
+
+                                 
+                                 console.log(obj);
+
+                                 this.apiService.postx('api/products',JSON.stringify(obj))
                                  .subscribe(r=>{
                                  if(r)   
                                  {
@@ -128,10 +151,12 @@ onFileSelected(event)
           const fd = new FormData();
           fd.append('image',this.selectedfile,this.selectedfile.name);
 
-          this.apiService.postx('api/uploadfile',fd)
+          this.apiService.postxfile('api/uploadfile',fd)
                                  .subscribe(r=>{
+                                  console.log(r);
                                  if(r)   
                                  {
+                                  console.log("success");
                                    console.log(r['originalname']);
                                    this.addproduct.controls['imagelink'].setValue(r['originalname']);
                                    this.editproduct.controls['imagelink'].setValue(r['originalname']);
@@ -140,6 +165,7 @@ onFileSelected(event)
                                  } 
                                  },error=>{
                                    this.log_error=error.message;
+                                   console.log("error");
                                  })
         }
         //
@@ -214,6 +240,29 @@ onFileSelected(event)
     }
    }
                              
+// 
+add_color(event: MatChipInputEvent): void {
+  const input = event.input;
+  const value = event.value;
 
+  // Add our fruit
+  if ((value || '').trim()) {
+    this.colors.push({name: value.trim()});
+  }
+
+  // Reset the input value
+  if (input) {
+    input.value = '';
+  }
+}
+
+remove(color): void {
+  const index = this.colors.indexOf(color);
+
+  if (index >= 0) {
+    this.colors.splice(index, 1);
+  }
+}
+// 
  
 }

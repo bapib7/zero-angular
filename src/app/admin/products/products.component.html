@@ -54,7 +54,7 @@
           <form  [formGroup]="addproduct" (ngSubmit)="add()">
 
               <div class="form-group">
-                  <input type="text" formControlName="name" placeholder="Product Name" class="form-control">
+                  <input type="text" formControlName="name"  placeholder="Product Name" class="form-control">
               </div>
               <div  *ngIf="this.addproduct.get('name').touched && this.addproduct.get('name').invalid">
                 <div class="alert alert-danger" *ngIf="this.addproduct.get('name').errors.required">Product name is required</div>
@@ -86,6 +86,22 @@
             </div>
             <div  *ngIf="this.addproduct.get('category').touched && this.addproduct.get('category').invalid">
               <div class="alert alert-danger" *ngIf="this.addproduct.get('category').errors.required">Select category</div>
+          </div>
+          <div class="form-group">
+          <mat-form-field class="example-chip-list" style="width:100%">
+            <mat-chip-list #chipList aria-label="Color selection">
+              <mat-chip *ngFor="let color of colors" [selectable]="selectable"
+                       [removable]="removable" (removed)="remove(color)">
+                {{color.name}} 
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="New color..."
+                     [matChipInputFor]="chipList"
+                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                     [matChipInputAddOnBlur]="addOnBlur"
+                     (matChipInputTokenEnd)="add_color($event)">
+            </mat-chip-list>
+          </mat-form-field>
           </div>
             <div class="form-group">
             <label>Upload a product image.</label>
@@ -156,7 +172,7 @@
         
         <form  [formGroup]="editproduct" (ngSubmit)="edit()">
             <div class="form-group">
-                <input type="text" formControlName="name" value="{{deleteddataitem?.productname}}" placeholder="Product Name" class="form-control">
+                <input type="text" formControlName="name"   value="{{deleteddataitem?.productname}}" placeholder="Product Name" class="form-control">
             </div>
             <div  *ngIf="this.editproduct.get('name').touched && this.editproduct.get('name').invalid">
               <div class="alert alert-danger" *ngIf="this.editproduct.get('name').errors.required">Product name is required</div>

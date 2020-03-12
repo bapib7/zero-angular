@@ -11,6 +11,7 @@ export class ApiService {
 
    httpOptions = {
     headers: new HttpHeaders({
+      
       'Content-Type':  'application/json',
       
     })
@@ -19,6 +20,10 @@ export class ApiService {
    postx(url,data)
    {
      return this.http.post(this.config.baseurl+url,data,this.httpOptions);
+   }
+   postxfile(url,data)
+   {
+     return this.http.post(this.config.baseurl+url,data);
    }
    getx(url)
    {
